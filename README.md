@@ -1,7 +1,4 @@
-Voici des explications détaillées sur le fonctionnement technique et l'utilisation pratique de ton nouveau Basic Drawing Board.
-1. Qu'est-ce que ce Node ?
-
-C'est un "Canvas Interactif" qui fait le pont entre ton action manuelle (dessiner) et la puissance de calcul de Flux. Contrairement aux nodes standards, il possède une interface graphique (le panneau de dessin) directement intégrée dans l'espace de travail ComfyUI.
+Ce node un "Canvas Interactif" qui fait le pont entre une  action manuelle (dessiner) et la puissance de calcul de Flux2 Klein edit . Contrairement aux nodes standards, il possède une interface graphique (le panneau de dessin) directement intégrée dans l'espace de travail ComfyUI.
 2. Les entrées et sorties du Node
 
     image (Entrée optionnelle) : Sert de fond de référence. C'est ici que tu connectes ton Load Image.
