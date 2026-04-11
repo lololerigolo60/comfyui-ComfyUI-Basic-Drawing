@@ -1,4 +1,4 @@
-Ce node un "Canvas Interactif" qui fait le pont entre une  action manuelle (dessiner) et la puissance de calcul de Flux2 Klein edit . Contrairement aux nodes standards, il possède une interface graphique (le panneau de dessin) directement intégrée dans l'espace de travail ComfyUI.
+Ce node est un "Canvas Interactif" qui fait le pont entre une  action manuelle (dessiner) et la puissance de calcul de Flux2 Klein edit . Contrairement aux nodes standards, il possède une interface graphique (le panneau de dessin) directement intégrée dans l'espace de travail ComfyUI.
 2. Les entrées et sorties du Node
 
     image (Entrée optionnelle) : Sert de fond de référence. C'est ici que tu connectes ton Load Image.
