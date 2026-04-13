@@ -18,7 +18,8 @@ Use an existing image for modification or inspiration.
 
     The Principle: Load a reference image in the background to draw over it with precision.
 
-    The Action: Once your trace is finished, you can delete the background image to keep only your "traced" drawing.
+    The Action: Once your trace is finished, you can delete the background image to keep only your "traced" drawing. or You can also draw new elements on an existing image to add details 
+    and ask the model to transform the drawing so that it blends into the image.
 
     Utility: Add accessories (glasses, hat), change clothes, or modify a character's pose.
 
