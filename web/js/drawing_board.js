@@ -33,7 +33,8 @@ app.registerExtension({
                         <button id="redoBtn" title="Rétablir (Ctrl+Y)" style="padding:4px 8px;">↪️</button>
                         <button id="syncBtn" style="background:#444; color:white; border:none; border-radius:4px; padding:4px 8px; cursor:pointer;">🔄 Sync</button>
                         <button id="autoMaskBtn" style="background:#2a5a8a; color:white; border:none; border-radius:4px; padding:4px 8px; cursor:pointer;">🤖 Auto</button>
-                        <button id="clearBtn" style="padding:4px 8px;">🗑️</button>
+                        <button id="clearDrawingBtn" title="Effacer le dessin uniquement" style="padding:4px 8px;">🎨🗑️</button>
+                        <button id="clearBgBtn" title="Effacer l'image de fond uniquement" style="padding:4px 8px;">🖼️🗑️</button>
                     </div>
                     <div style="position:relative; background:#000; border:2px solid #333; line-height:0; overflow:hidden;">
                         <canvas id="bgCanvas" style="position:absolute; top:0; left:0; width:100%; height:auto; z-index:1;"></canvas>
@@ -141,9 +142,7 @@ app.registerExtension({
                     const y = Math.floor((e.clientY - rect.top) * (canvas.height / rect.height));
                     
                     if (currentMode === "pipette") {
-                        // On essaie de lire le dessin d'abord
                         let pixel = ctx.getImageData(x, y, 1, 1).data;
-                        // Si le pixel est transparent sur le dessin, on lit le fond
                         if (pixel[3] < 10) {
                             pixel = bgCtx.getImageData(x, y, 1, 1).data;
                         }
@@ -192,8 +191,20 @@ app.registerExtension({
                 div.querySelector("#eraserBtn").onclick = () => { currentMode = "eraser"; canvas.style.cursor = "crosshair"; };
                 div.querySelector("#fillBtn").onclick = () => { currentMode = "fill"; canvas.style.cursor = "crosshair"; };
                 div.querySelector("#pipetteBtn").onclick = () => { currentMode = "pipette"; canvas.style.cursor = "copy"; };
-                div.querySelector("#clearBtn").onclick = () => { saveHistory(); ctx.clearRect(0, 0, canvas.width, canvas.height); updateValue(); };
                 
+                // --- LOGIQUE DES POUBELLES ---
+                div.querySelector("#clearDrawingBtn").onclick = () => { 
+                    saveHistory(); 
+                    ctx.clearRect(0, 0, canvas.width, canvas.height); 
+                    updateValue(); 
+                };
+
+                div.querySelector("#clearBgBtn").onclick = () => { 
+                    bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+                    this.lastBgFile = null; 
+                };
+                // -----------------------------
+
                 div.querySelector("#syncBtn").onclick = () => {
                     if (!this.lastBgFile) return;
                     const img = new Image();
@@ -232,10 +243,9 @@ app.registerExtension({
 
                 this.addDOMWidget("drawing_ui", "canvas", div);
                 
-                // Calcul automatique de la taille pour éviter que les boutons soient masqués
                 setTimeout(() => {
                     resizeCanvas();
-                    const nodeWidth = 550;
+                    const nodeWidth = 600; // Légèrement plus large pour les boutons
                     const nodeHeight = 650; 
                     this.setSize([nodeWidth, nodeHeight]);
                 }, 100);
