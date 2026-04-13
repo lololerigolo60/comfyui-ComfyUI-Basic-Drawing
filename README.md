@@ -1,48 +1,63 @@
-Ce node est un "Canvas Interactif" qui fait le pont entre une  action manuelle (dessiner) et la puissance de calcul de Flux2 Klein edit . Contrairement aux nodes standards, il possède une interface graphique (le panneau de dessin) directement intégrée dans l'espace de travail ComfyUI.
-2. Les entrées et sorties du Node
+🎨 Complete User Manual: Basic Drawing Board
 
-    image (Entrée optionnelle) : Sert de fond de référence. C'est ici que tu connectes ton Load Image.
+The Basic Drawing Board is a hybrid creative tool designed for ComfyUI. It allows you to transform manual sketches or color modifications into photorealistic images using "Edit" diffusion models.
+🚀 Two Main Creative Modes
+1. Pure Creation (Concept-to-Photo)
 
-    auto_mask (Entrée optionnelle) : Reçoit les masques générés par l'IA (comme SAM). Il accepte désormais des "batchs" (plusieurs détections en même temps).
+You don't need a source image. Start from a blank page to bring an idea to life.
 
-    IMAGE (Sortie) : L'image finale fusionnée (Fond + Dessin). C'est ce que tu envoies au modèle Flux pour le "Img2Img".
+    The Principle: Draw simple shapes and color masses (e.g., a red circle and a green rectangle).
 
-    MASK (Sortie) : Un masque binaire (noir et blanc). Il indique à Flux précisément où tu as dessiné. Tout ce qui est dessiné sera modifié par l'IA, tout ce qui est vide restera intact.
+    The Action: Your drawing acts as a structural and chromatic guide. Paired with a prompt like "a red apple on a table", the model will transform your brushstrokes into real objects.
 
-3. Les commandes de l'interface
+    Utility: Precisely control the composition and colors of a generated image.
 
-    🖌️ Pinceau : Pour dessiner manuellement.
+2. Tracing & Transformation (The "Decal" Method)
 
-    🫗 Pot de peinture : Remplit une zone fermée ou une zone de même couleur. Très utile pour colorier rapidement un masque SAM importé.
+Use an existing image for modification or inspiration.
 
-    🧽 Gomme : Pour effacer tes traits ou affiner un masque IA.
+    The Principle: Load a reference image in the background to draw over it with precision.
 
-    🔄 Sync : Crucial. Il sert à importer l'image que tu as branchée en entrée sur le fond du canvas pour te servir de guide. Il faut d'abord faire un premier run pour que le node détecte l'image et ensuite cliquer sur sync pour importer.
+    The Action: Once your trace is finished, you can delete the background image to keep only your "traced" drawing.
 
-    🤖 Auto : Importe le masque venant de l'entrée auto_mask (On peut utiliser SAM3 par exemple pour détecter des choses dans l'image et en faire des masks) . Il fusionne automatiquement tous les objets détectés et rend le fond transparent
+    Utility: Add accessories (glasses, hat), change clothes, or modify a character's pose.
 
-    pour ne pas effacer les dessins précédents. Il faut d'abord faire un premier run pour que les masks soient chargés et ensuite en appuyant sur auto ça affiche les masques sur l'image qui aété chargée précédemment par sync. On peu changer
+🛠️ Toolbar Guide
+Icon	Tool	Function
+<input type="color" disabled>	Color Picker	Crucial: The chosen color defines the final color of the AI-generated object.
+<input type="range" disabled>	Brush Size	Adjust stroke thickness for precision or large fills.
+🖌️	Brush	Standard free-hand drawing tool.
+🫗	Paint Bucket	Instantly fills a closed area with the selected color.
+🧽	Eraser	Erases the drawing (creates transparency in the mask).
+🧪	Eyedropper	Samples color from your drawing 🎨 or the background image 🖼️.
+↩️ / ↪️	Undo / Redo	Undo or redo an action (Shortcuts: Ctrl+Z / Ctrl+Y).
+🔄 Sync	Synchronization	Imports the image connected to the image input onto the background layer.
+🤖 Auto	Auto-Mask	Automatically fills the area detected by an external node (like SAM) with your color.
+🎨🗑️	Clear Drawing	Deletes all your manual sketches (the background remains intact).
+🖼️🗑️	Clear Background	Deletes only the reference image (your sketch remains intact for tracing).
+⚙️ Advanced Features: Sync & Auto
+🔄 Using the SYNC Button
 
-    la couleur des masks et on peut effacer des masks avec la gomme.
+This is the bridge between your ComfyUI workflow and the canvas.
 
-    🗑️ Poubelle : Efface tout ton dessin (mais garde le fond).
+    How to: Connect any image node to the image input. Click Sync to display it behind the Drawing Board.
 
-5. Workflow type : Édition assistée par IA
+    Note: This does not replace your current drawing; it only changes what is "behind" it.
 
-Voici comment utiliser le node au maximum de ses capacités :
+🤖 Using the AUTO Button
 
-    Préparation : Connecte une image à image. Connecte un détecteur (ex: GroundingDINO + SAM) à auto_mask.
+Ideal for modifying specific objects without overstepping boundaries.
 
-    Premier passage : Clique sur Queue Prompt. Le serveur calcule l'image et détecte les objets.
+    How to: Connect a MASK output (from a detection node like Segment Anything / SAM) to the auto_mask input. Pick a color, then click Auto.
 
-    Mise en place : * Clique sur Sync : Ton image apparaît.
+    Result: The detected area is instantly painted. You can then use the eraser or brush to refine the mask manually.
 
-        Clique sur Auto : Les zones détectées (ex: tous les visages) se colorent instantanément sur ton canvas.
+💡 Connecting to "Edit" Models (Flux / Klein)
 
-    Retouche : * Prends la Gomme pour enlever un visage que tu ne veux pas changer.
+To make the magic happen, the node sends two essential pieces of information to the model:
 
-        Prends le Pinceau pour ajouter une zone à modifier à la main.
+    IMAGE (Output): The blend of your drawing and the background. This is the visual guide.
 
-        Change la couleur avec le Pot de peinture si tu veux donner une indication de couleur différente à Flux.
+    MASK (Output): The exact area where you drew. This defines the AI's workspace.
 
-    Génération : Relance Queue Prompt. Flux reçoit l'image fusionnée et le masque exact de tes traits.
+Final Tip: For optimal results, try to use colors close to what you want to achieve (e.g., a dark blue for a night sky). The closer your drawing is to your intention in terms of shape and color, the more faithful the "Edit" model will be to your idea!
